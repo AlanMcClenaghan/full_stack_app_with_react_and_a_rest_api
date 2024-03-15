@@ -3,6 +3,52 @@ import { createContext, useState } from "react";
 const UserContext = createContext(null);
 
 export const UserProvider = (props) => {
+    const [authUser, setAuthUser] = useState(null);
+    console.log("authUser: " + authUser);
+
+    const signIn = async (credentials) => {
+        console.log("credentials: " + credentials);
+
+        const encodedCredentials = btoa(`${credentials.emailAddress}:${credentials.password}`);
+        console.log("encodedCredentials: " + encodedCredentials);
+
+        const fetchOptions = {
+            method: "GET",
+            headers: {
+              Authorization: `Basic ${encodedCredentials}`
+            }
+        };
+      
+        const response = await fetch("http://localhost:5000/api/users", fetchOptions);
+        console.log("response: " + response.status);
+
+        if (response.status === 200) {
+            const user = await response.json();
+            setAuthUser(user);
+            return user
+          } else if (response.status === 401) {
+            return null
+          } else {
+            throw new Error();
+          }
+    }
+
+    const signOut = () => {
+        setAuthUser(null)
+    }
+
+    return (
+        <UserContext.Provider value={{
+          authUser,
+          actions: {
+            signIn,
+            signOut
+          }
+        }}>
+          {props.children}
+        </UserContext.Provider>
+      );
+      
 
 }
 

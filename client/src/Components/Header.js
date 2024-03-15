@@ -4,21 +4,22 @@ import UserContext from "../context/UserContext";
 
 
 const Header = () => {
-    const { user } = useContext(UserContext);
+    const { authUser } = useContext(UserContext);
     return (
         <header>
             <div className="wrap header--flex">
                 <h1 className="header--logo"><Link to="/">Courses</Link></h1>
                 <nav>
                     {
-                        user ? (
-                            <ul className="header--signedout">
-                                <li><Link to="signout">Sign Out</Link></li>
-                            </ul>
-                        ) : (
+                        authUser === null ? (
                             <ul className="header--signedout">
                                 <li><Link to="signup">Sign Up</Link></li>
                                 <li><Link to="signin">Sign In</Link></li>
+                            </ul>        
+                        ) : (
+                            <ul className="header--signedout">
+                                <li>Welcome, {authUser.firstName} {authUser.lastName}</li>
+                                <li><Link to="signout">Sign Out</Link></li>
                             </ul>
                         ) 
                     }
