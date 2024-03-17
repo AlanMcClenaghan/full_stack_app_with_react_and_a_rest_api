@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import UserContext from '../context/UserContext';
 
@@ -7,6 +7,8 @@ const UserSignIn = () => {
     const { actions } = useContext(UserContext);
     console.log(actions);
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location);
 
     // State
     const emailAddress = useRef(null);
@@ -16,6 +18,12 @@ const UserSignIn = () => {
     // event handlers
     const handleSubmit = async e => {
         e.preventDefault();
+        let from = '/';
+        console.log("from: " + from)
+        if (location.state) {
+            from = location.state.from;
+            console.log("from: " + from)
+        }
 
 
         const credentials = {
@@ -26,7 +34,7 @@ const UserSignIn = () => {
         try {
             const user = await actions.signIn(credentials);
             if (user) {
-                navigate("/");
+                navigate(from);
             } else {
                 setErrors(["Sign-in was unsuccessful"])
             }
