@@ -9,6 +9,7 @@ import CourseDetails from "./Components/CourseDetail";
 import CreateCourse from "./Components/CreateCourse";
 import UpdateCourse from "./Components/UpdateCourse";
 import Error from "./Components/Error";
+import PrivateRoute from "./Components/PrivateRoute";
 
 function App() {
 
@@ -17,12 +18,14 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Courses />} />
-        <Route path="/courses/create" element={<CreateCourse />} />
-        <Route path="/courses/:id/update" element={<UpdateCourse />} />
-        <Route path="/courses/:id" element={<CourseDetails />} />
         <Route path="/signin" element={<UserSignIn />} />
         <Route path="/signup" element={<UserSignUp />} />
         <Route path="/signout" element={<UserSignOut />} />
+        <Route path="/courses/:id" element={<CourseDetails />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/courses/create" element={<CreateCourse />} />
+          <Route path="/courses/:id/update" element={<UpdateCourse />} />
+        </Route>
         <Route path="/error" element={<Error />} />
       </Routes>
     </>

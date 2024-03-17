@@ -40,7 +40,6 @@ const UserSignUp = () => {
         console.log("fetchOptions: " + fetchOptions.headers["Content-Type"]);
         console.log("fetchOptions: " + fetchOptions.body);
 
-        
         try {
             const response = await fetch("http://localhost:5000/api/users", fetchOptions);
 

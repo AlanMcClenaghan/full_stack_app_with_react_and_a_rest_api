@@ -23,15 +23,6 @@ const UserSignIn = () => {
             password: password.current.value,
         }
 
-        // const encodedCredentials = btoa(`${credentials.emailAddress}:${credentials.password}`);
-
-        // const fetchOptions = {
-        //     method: "GET",
-        //     headers: {
-        //         Authorization: `Basic ${encodedCredentials}`
-        //     }
-        // };
-
         try {
             const user = await actions.signIn(credentials);
             if (user) {
