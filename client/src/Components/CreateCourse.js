@@ -1,35 +1,105 @@
+import { useContext, useRef, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+
+import ErrorsDisplay from './ErrorsDisplay';
+
+import { api } from '../utils/apiHelper';
+
+import UserContext from "../context/UserContext";
+
 const CreateCourse = () => {
+    const { authUser } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    console.log(authUser);
+    console.log(authUser.id);
+
+    // State
+    const courseTitle = useRef(null);
+    const courseDescription = useRef(null);
+    const estimatedTime = useRef(null);
+    const materialsNeeded = useRef(null);
+    const [errors, setErrors] = useState([]);
+
+    // event handlers
+    const handleSubmit = async e => {
+        e.preventDefault();
+
+        const course = {
+            userId: authUser.id,
+            title: courseTitle.current.value,
+            description: courseDescription.current.value,
+            estimatedTime: estimatedTime.current.value,
+            materialsNeeded: materialsNeeded.current.value
+        }
+
+        try {
+            const response = await api("/courses", "POST", course, authUser);
+            console.log("response: " + response.status);
+
+            if (response.status === 201) {
+                console.log(`${course.title} is successfully created!`);
+                navigate("/");
+            } else if (response.status === 400) {
+                const data = await response.json();
+                console.log("data: " + data.errors);
+                setErrors(data.errors);
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            console.log("errors: " + errors);
+            navigate("/error")
+        }
+    }
+
+    const handleCancel = e => {
+        e.preventDefault();
+        navigate("/");
+    }
+
     return (
         <main>
-            <div class="wrap">
+            <div className="wrap">
                 <h2>Create Course</h2>
-                <div class="validation--errors">
-                    <h3>Validation Errors</h3>
-                    <ul>
-                        <li>Please provide a value for "Title"</li>
-                        <li>Please provide a value for "Description"</li>
-                    </ul>
-                </div>
-                <form>
-                    <div class="main--flex">
+                <ErrorsDisplay errors={errors}/>
+                <form onSubmit={handleSubmit}>
+                    <div className="main--flex">
                         <div>
-                            <label for="courseTitle">Course Title</label>
-                            <input id="courseTitle" name="courseTitle" type="text" value="" />
+                            <label htmlFor="courseTitle">Course Title</label>
+                            <input 
+                                id="courseTitle" 
+                                name="courseTitle" 
+                                type="text" 
+                                ref={courseTitle} />
 
-                            <p>By Joe Smith</p>
+                            <p>By {authUser.firstName} {authUser.lastName}</p>
 
-                            <label for="courseDescription">Course Description</label>
-                            <textarea id="courseDescription" name="courseDescription"></textarea>
+                            <label htmlFor="courseDescription">Course Description</label>
+                            <textarea 
+                                id="courseDescription" 
+                                name="courseDescription"
+                                ref={courseDescription}>
+                            </textarea>
                         </div>
                         <div>
-                            <label for="estimatedTime">Estimated Time</label>
-                            <input id="estimatedTime" name="estimatedTime" type="text" value="" />
+                            <label htmlFor="estimatedTime">Estimated Time</label>
+                            <input 
+                                id="estimatedTime" 
+                                name="estimatedTime" 
+                                type="text" 
+                                ref={estimatedTime}/>
 
-                            <label for="materialsNeeded">Materials Needed</label>
-                            <textarea id="materialsNeeded" name="materialsNeeded"></textarea>
+                            <label htmlFor="materialsNeeded">Materials Needed</label>
+                            <textarea 
+                                id="materialsNeeded" 
+                                name="materialsNeeded"
+                                ref={materialsNeeded}>
+                            </textarea>
                         </div>
                     </div>
-                    <button class="button" type="submit">Create Course</button><button class="button button-secondary" onclick="event.preventDefault(); location.href='/';">Cancel</button>
+                    <button className="button" type="submit">Create Course</button>
+                    <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
                 </form>
             </div>
         </main>

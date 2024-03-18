@@ -1,14 +1,16 @@
 import { useContext, useRef, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
+import ErrorsDisplay from './ErrorsDisplay';
+
 import UserContext from '../context/UserContext';
 
 const UserSignIn = () => {
     const { actions } = useContext(UserContext);
-    console.log(actions);
+    // console.log("actions: " + actions.signIn);
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location);
+    // console.log(location);
 
     // State
     const emailAddress = useRef(null);
@@ -24,7 +26,6 @@ const UserSignIn = () => {
             from = location.state.from;
             console.log("from: " + from)
         }
-
 
         const credentials = {
             emailAddress: emailAddress.current.value,
@@ -54,7 +55,7 @@ const UserSignIn = () => {
         <main>
             <div className="form--centered">
                 <h2>Sign In</h2>
-                
+                <ErrorsDisplay errors={errors}/>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="emailAddress">Email Address</label>
                     <input 

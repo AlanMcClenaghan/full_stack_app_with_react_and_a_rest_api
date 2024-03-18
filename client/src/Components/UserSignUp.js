@@ -1,5 +1,8 @@
 import { useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
+import { api } from '../utils/apiHelper';
+
+import ErrorsDisplay from './ErrorsDisplay';
 
 import UserContext from "../context/UserContext";
 
@@ -25,23 +28,8 @@ const UserSignUp = () => {
             password: password.current.value,
         }
 
-        console.log("user: " + user.firstName + " " + user.lastName);
-        console.log("user: " + user.emailAddress + " " + user.password);
-
-        const fetchOptions = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            },
-            body: JSON.stringify(user)
-        }
-
-        console.log("fetchOptions: " + fetchOptions.method);
-        console.log("fetchOptions: " + fetchOptions.headers["Content-Type"]);
-        console.log("fetchOptions: " + fetchOptions.body);
-
         try {
-            const response = await fetch("http://localhost:5000/api/users", fetchOptions);
+            const response = await api("/users", "POST", user);
 
             if (response.status === 201) {
                 console.log(`${user.firstName} ${user.lastName} is successfully set up!`);
@@ -69,7 +57,7 @@ const UserSignUp = () => {
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
-                
+                <ErrorsDisplay errors={errors}/>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="firstName">First Name</label>
                     <input 
