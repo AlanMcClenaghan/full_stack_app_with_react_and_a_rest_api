@@ -20,10 +20,6 @@ export const api = (
       const encodedCredentials = btoa(`${credentials.emailAddress}:${credentials.password}`);
       options.headers.Authorization = `Basic ${encodedCredentials}`;
     }
-  
-    console.log("url: " + url);
-    console.log("options: " + options.body);
-    console.log("credentials: " + credentials.password);
 
     return fetch(url, options);
   }

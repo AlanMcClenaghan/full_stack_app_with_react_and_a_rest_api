@@ -12,8 +12,6 @@ const Courses = () => {
         .catch(error => console.log("Error fetching and parsing date", error));
     }, []);
 
-    console.log(courses);
-
     return (
         <main>
             <div className="wrap main--grid">
