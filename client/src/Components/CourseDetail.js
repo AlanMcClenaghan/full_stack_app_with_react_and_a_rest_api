@@ -18,7 +18,6 @@ const CourseDetails = () => {
     const {id} = useParams();
 
     // Set state variable for courses
-    // const [errors, setErrors] = useState([]);
     const [course, setCourse] = useState([]);
 
     // Loading Indicator
@@ -61,8 +60,7 @@ const CourseDetails = () => {
             } else if (response.status === 403) {
                 console.log("This is forbidden.");
             } else {
-                console.log(response.status);
-                navigate("/error")
+                throw new Error();
             }
         } catch (error) {
             console.log("Error deleting course.", error);
@@ -83,7 +81,7 @@ const CourseDetails = () => {
 
             {
                 (loading) 
-                ? <h1>Loading...</h1>
+                ? <h1>Loading course...</h1>
                 :
                 <div className="wrap">
                 <h2>Course Detail</h2>
