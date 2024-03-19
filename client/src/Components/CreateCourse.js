@@ -8,11 +8,12 @@ import { api } from '../utils/apiHelper';
 import UserContext from "../context/UserContext";
 
 const CreateCourse = () => {
-    const { authUser } = useContext(UserContext);
-    const navigate = useNavigate();
 
-    console.log(authUser);
-    console.log(authUser.id);
+    // User Context
+    const { authUser } = useContext(UserContext);
+
+    // useNavigate hook
+    const navigate = useNavigate();
 
     // State
     const courseTitle = useRef(null);
@@ -53,6 +54,7 @@ const CreateCourse = () => {
         }
     }
 
+    // Cancel
     const handleCancel = e => {
         e.preventDefault();
         navigate("/");

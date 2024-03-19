@@ -76,7 +76,7 @@ const CourseDetails = () => {
                 <div className="wrap">
 
                 {
-                    (   authUser === course.user?.id ) 
+                    ( authUser.id === course.user?.id ) 
                     ?   <>
                             <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
                             <Link className="button" onClick={handleDelete}>Delete Course</Link>
@@ -115,7 +115,6 @@ const CourseDetails = () => {
                 </form>
             </div>
             }
-            
 
         </main>
     );

@@ -6,11 +6,15 @@ import ErrorsDisplay from './ErrorsDisplay';
 import UserContext from '../context/UserContext';
 
 const UserSignIn = () => {
+
+    // User Context
     const { actions } = useContext(UserContext);
-    // console.log("actions: " + actions.signIn);
+  
+    // useNavigate hook
     const navigate = useNavigate();
+
+    // Location hook
     const location = useLocation();
-    // console.log(location);
 
     // State
     const emailAddress = useRef(null);
@@ -46,6 +50,7 @@ const UserSignIn = () => {
 
     }
 
+    // Cancel
     const handleCancel = e => {
         e.preventDefault();
         navigate("/");

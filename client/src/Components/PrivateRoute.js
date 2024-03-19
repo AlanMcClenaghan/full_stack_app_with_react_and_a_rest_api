@@ -5,9 +5,11 @@ import UserContext from '../context/UserContext';
 
 const PrivateRoute = () => {
 
+    // User Context
     const { authUser } = useContext(UserContext);
-    const location = useLocation();
 
+    // Location hook
+    const location = useLocation();
 
     if (authUser) {
         console.log(location.pathname);

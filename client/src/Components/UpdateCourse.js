@@ -31,7 +31,7 @@ const UpdateCourse = () => {
     // Add a loading indicator that displays each time the app fetches new data.
     const [loading, setLoading] = useState(false);
 
-// API call that will handle the fetch requests to get courses
+    // API call that will handle the fetch requests to get courses
     const getCourse = async () => {    
 
         setLoading(true);
@@ -67,11 +67,7 @@ const UpdateCourse = () => {
             materialsNeeded: materialsNeeded.current.value
        }
 
-       console.log(courseUpdate);
-
        setCourseUpdate(courseUpdate);
-
-       console.log(courseUpdate);
     
         try {
             const response = await api(`/courses/${id}`, "PUT", courseUpdate, authUser)
@@ -92,6 +88,7 @@ const UpdateCourse = () => {
         }
     }
 
+    // Cancel
     const handleCancel = e => {
         e.preventDefault();
         navigate(`/courses/${id}`);

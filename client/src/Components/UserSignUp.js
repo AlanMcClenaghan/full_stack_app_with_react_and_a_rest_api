@@ -7,7 +7,11 @@ import ErrorsDisplay from './ErrorsDisplay';
 import UserContext from "../context/UserContext";
 
 const UserSignUp = () => {
+
+    // User Context
     const { actions } = useContext(UserContext);
+
+    // Navigate hook
     const navigate = useNavigate();
 
     // State
@@ -48,6 +52,7 @@ const UserSignUp = () => {
         }
     }
 
+    // Cancel
     const handleCancel = e => {
         e.preventDefault();
         navigate("/");
