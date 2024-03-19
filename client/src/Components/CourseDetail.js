@@ -34,7 +34,8 @@ const CourseDetails = () => {
             await api(`/courses/${id}`, "GET", null, authUser)
             .then(response => response.json())
             .then(responseData => {
-                setCourse(responseData)
+                setCourse(responseData);
+                console.log(course);
                 setLoading(false);
             })
         } catch (error) {
@@ -73,8 +74,15 @@ const CourseDetails = () => {
         <main>
             <div className="actions--bar">
                 <div className="wrap">
-                    <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-                    <Link className="button" onClick={handleDelete}>Delete Course</Link>
+
+                {
+                    (   authUser === course.user?.id ) 
+                    ?   <>
+                            <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
+                            <Link className="button" onClick={handleDelete}>Delete Course</Link>
+                        </>
+                    :   null
+                }
                     <Link className="button button-secondary" to="/">Return to List</Link>
                 </div>
             </div>
@@ -90,7 +98,7 @@ const CourseDetails = () => {
                         <div>
                             <h3 className="course--detail--title">Course</h3>
                             <h4 className="course--name">{course.title}</h4>
-                            <p>By {authUser.firstName} {authUser.lastName}</p>
+                            <p>By {course.user?.firstName} {course.user?.lastName}</p>
 
                             <Markdown>{course.description}</Markdown>
                         </div>
