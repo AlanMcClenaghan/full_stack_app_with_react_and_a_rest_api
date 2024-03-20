@@ -39,6 +39,10 @@ const UserSignUp = () => {
                 console.log(`${user.firstName} ${user.lastName} is successfully set up!`);
                 await actions.signIn(user);
                 navigate("/");
+            } else if (response.status === 500) {
+                navigate("/error");
+            } else if (response.status === 404) {
+                navigate("/notfound");
             } else if (response.status === 400) {
                 const data = await response.json();
                 setErrors(data.errors);

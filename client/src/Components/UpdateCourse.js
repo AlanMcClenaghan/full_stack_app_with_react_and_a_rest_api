@@ -31,31 +31,41 @@ const UpdateCourse = () => {
     // Add a loading indicator that displays each time the app fetches new data.
     const [loading, setLoading] = useState(false);
 
-    // API call that will handle the fetch requests to get courses
-    const getCourse = async () => {    
-
-        setLoading(true);
-
-        try {
-            await api(`/courses/${id}`, "GET", null, authUser)
-            .then(response => response.json())
-            .then(responseData => {
-                if (responseData.user.id !== authUser.id ) {
-                    navigate("/forbidden")
-                }
-                setCourse(responseData);
-                setLoading(false);
-            })
-        } catch (error) {
-            console.log("Error fetching and parsing data", error);
-            navigate("/notfound")
-        }
-    }
 
     // Get course
-    useEffect(() => {         
+    useEffect(() => {  
+
+        // API call that will handle the fetch requests to get courses
+        const getCourse = async () => {    
+
+            setLoading(true);
+    
+                try {
+                    const response = await api(`/courses/${id}`, "GET", null, authUser);
+    
+                    if (response.status === 200) {
+                        const responseData = await response.json();
+                        if (responseData.user.id !== authUser.id ) {
+                            navigate("/forbidden")
+                        }
+                        setCourse(responseData);
+                        setLoading(false);
+                    } else if (response.status === 500) {
+                        navigate("/error");
+                    } else if (response.status === 404) {
+                        navigate("/notfound");
+                    } else {
+                        throw new Error();
+                    }
+        
+                } catch (error) {
+                    console.log("Error fetching and parsing data", error);
+                    navigate("/error");
+                }
+            }
+        
         getCourse(); 
-    },[]);
+    },[authUser,id,navigate]);
 
     // Update Course handler
     const handleUpdate = async e => {
@@ -74,6 +84,10 @@ const UpdateCourse = () => {
             const response = await api(`/courses/${id}`, "PUT", courseUpdate, authUser)
             if (response.status === 204) {
                 navigate(`/courses/${id}`);
+            } else if (response.status === 500) {
+                navigate("/error");
+            } else if (response.status === 404) {
+                navigate("/notfound");
             } else if (response.status === 400) {
                 const data = await response.json();
                 setErrors(data.errors);
@@ -81,7 +95,7 @@ const UpdateCourse = () => {
                 throw new Error();
             }
         } catch (error) {
-            navigate("/notfound");
+            navigate("/error");
         }
     }
 

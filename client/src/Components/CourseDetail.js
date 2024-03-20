@@ -33,21 +33,32 @@ const CourseDetails = () => {
 
         setLoading(true);
 
-        try {
-            await api(`/courses/${id}`, "GET", null, authUser)
-            .then(response => response.json())
-            .then(responseData => {
-                setCourse(responseData);
-                setUser(responseData.user);
-                setLoading(false);
-            })
-        } catch (error) {
-            console.log("Error fetching and parsing data", error);
-            navigate("/notfound")
+            try {
+                const response = await api(`/courses/${id}`, "GET", null, authUser);
+
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    setCourse(responseData);
+                    setUser(responseData.user);
+                    setLoading(false);
+                } else if (response.status === 500) {
+                    navigate("/error");
+                } else if (response.status === 404) {
+                    navigate("/notfound");
+                } else {
+                    throw new Error();
+                }
+    
+            } catch (error) {
+                console.log("Error fetching and parsing data", error);
+                navigate("/error");
+            }
         }
-    }
     
         getCourse(); 
+
+        console.log(course);
+
     },[authUser,id,navigate]);
 
     // Delete Course handler
@@ -55,7 +66,7 @@ const CourseDetails = () => {
         e.preventDefault(); 
     
         try {
-            const response = await api(`/courses/${id}`, "DELETE", null, authUser)
+            const response = await api(`/courses/${id}`, "DELETE", null, authUser);
             if (response.status === 204) {
                 navigate("/");
             } else if (response.status === 403) {
@@ -65,7 +76,7 @@ const CourseDetails = () => {
             }
         } catch (error) {
             console.log("Error deleting course.", error);
-            navigate("/notfound")
+            navigate("/error")
         }
     }
 

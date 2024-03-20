@@ -1,29 +1,65 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router-dom';
+
+import { api } from '../utils/apiHelper';
 
 const Courses = () => {
 
     // State
     const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    // useNavigate hook
+    const navigate = useNavigate();
 
     // Get Courses
     useEffect(() => {  
-        fetch("http://localhost:5000/api/courses")
-        .then(response => response.json())
-        .then(responseData => setCourses(responseData))
-        .catch(error => console.log("Error fetching and parsing date", error));
+
+        const getCourses = async () => {    
+
+            setLoading(true);
+    
+            try {
+                const response = await api("/courses", "GET", null, null)
+
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    setCourses(responseData);
+                    setLoading(false);
+                } else if (response.status === 500) {
+                    navigate("/error");
+                } else if (response.status === 404) {
+                    navigate("/notfound");
+                } else {
+                    throw new Error();
+                }
+
+            } catch (error) {
+                console.log("Error fetching and parsing data", error);
+                navigate("/error")
+            }
+        }
+
+        getCourses();
+
     }, []);
 
     return (
         <main>
             <div className="wrap main--grid">
-
-                {courses.map(course => (
-                    <Link key={course.id} className="course--module course--link" to={`/courses/${course.id}`}>
-                        <h2 className="course--label">Course</h2>
-                        <h3 className="course--title">{course.title}</h3>
-                    </Link>
-                ))}
+            
+                {
+                    (loading) 
+                    ? <h1>Loading courses...</h1>
+                    :
+                    courses.map(course => (
+                        <Link key={course.id} className="course--module course--link" to={`/courses/${course.id}`}>
+                            <h2 className="course--label">Course</h2>
+                            <h3 className="course--title">{course.title}</h3>
+                        </Link>
+                    ))
+                }
+        
                 <Link className="course--module course--add--module" to={"/courses/create"}>
                     <span className="course--add--title">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"

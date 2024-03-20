@@ -29,9 +29,9 @@ function App() {
           <Route path="/courses/create" element={<CreateCourse />} />
           <Route path="/courses/:id/update" element={<UpdateCourse />} />
         </Route>
-        <Route path="*" element={<NotFound />} />
         <Route path="/error" element={<UnhandledError />} />
         <Route path="/forbidden" element={<Forbidden />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
