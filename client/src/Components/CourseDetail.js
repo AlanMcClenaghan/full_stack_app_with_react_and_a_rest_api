@@ -57,8 +57,6 @@ const CourseDetails = () => {
     
         getCourse(); 
 
-        console.log(course);
-
     },[authUser,id,navigate]);
 
     // Delete Course handler

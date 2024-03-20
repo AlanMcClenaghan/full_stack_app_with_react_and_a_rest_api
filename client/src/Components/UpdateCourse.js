@@ -24,7 +24,6 @@ const UpdateCourse = () => {
     const estimatedTime = useRef(null);
     const materialsNeeded = useRef(null);
     const [course, setCourse] = useState([]);
-    const [courseUpdate, setCourseUpdate] = useState([]);
     const [errors, setErrors] = useState([]);
 
     // Loading Indicator
@@ -78,9 +77,6 @@ const UpdateCourse = () => {
             estimatedTime: estimatedTime.current.value,
             materialsNeeded: materialsNeeded.current.value
        }
-
-       setCourseUpdate(courseUpdate);
-       console.log(courseUpdate);
     
         try {
             const response = await api(`/courses/${id}`, "PUT", courseUpdate, authUser)

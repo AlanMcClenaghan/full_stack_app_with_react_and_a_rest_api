@@ -42,7 +42,7 @@ const Courses = () => {
 
         getCourses();
 
-    }, []);
+    }, [navigate]);
 
     return (
         <main>
