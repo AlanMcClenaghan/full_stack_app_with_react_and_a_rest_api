@@ -19,14 +19,17 @@ const CourseDetails = () => {
 
     // Set state variable for courses
     const [course, setCourse] = useState([]);
+    const [user, setUser] = useState([]);
 
     // Loading Indicator
     // Add a loading indicator that displays each time the app fetches new data.
     const [loading, setLoading] = useState(false);
 
-
-    // API call that will handle the fetch requests to get courses
-    const getCourse = async () => {    
+    // Get course
+    useEffect(() => {   
+        
+        // API call that will handle the fetch requests to get courses
+        const getCourse = async () => {    
 
         setLoading(true);
 
@@ -35,19 +38,17 @@ const CourseDetails = () => {
             .then(response => response.json())
             .then(responseData => {
                 setCourse(responseData);
-                console.log(course);
+                setUser(responseData.user);
                 setLoading(false);
             })
         } catch (error) {
             console.log("Error fetching and parsing data", error);
-            navigate("/error")
+            navigate("/notfound")
         }
     }
-
-    // Get course
-    useEffect(() => {         
+    
         getCourse(); 
-    },[]);
+    },[authUser,id,navigate]);
 
     // Delete Course handler
     const handleDelete = async e => {
@@ -56,7 +57,6 @@ const CourseDetails = () => {
         try {
             const response = await api(`/courses/${id}`, "DELETE", null, authUser)
             if (response.status === 204) {
-                console.log("Course Deleted");
                 navigate("/");
             } else if (response.status === 403) {
                 console.log("This is forbidden.");
@@ -65,7 +65,7 @@ const CourseDetails = () => {
             }
         } catch (error) {
             console.log("Error deleting course.", error);
-            navigate("/error")
+            navigate("/notfound")
         }
     }
 
@@ -76,7 +76,7 @@ const CourseDetails = () => {
                 <div className="wrap">
 
                 {
-                    ( authUser.id === course.user?.id ) 
+                    ( authUser?.id === user?.id ) 
                     ?   <>
                             <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
                             <Link className="button" onClick={handleDelete}>Delete Course</Link>
@@ -98,7 +98,7 @@ const CourseDetails = () => {
                         <div>
                             <h3 className="course--detail--title">Course</h3>
                             <h4 className="course--name">{course.title}</h4>
-                            <p>By {course.user?.firstName} {course.user?.lastName}</p>
+                            <p>By {user?.firstName} {user?.lastName}</p>
 
                             <Markdown>{course.description}</Markdown>
                         </div>

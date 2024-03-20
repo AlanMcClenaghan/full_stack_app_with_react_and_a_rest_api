@@ -12,7 +12,6 @@ const PrivateRoute = () => {
     const location = useLocation();
 
     if (authUser) {
-        console.log(location.pathname);
         return <Outlet /> 
     } else {
         return <Navigate to="/signin" state={{from: location.pathname}}/>

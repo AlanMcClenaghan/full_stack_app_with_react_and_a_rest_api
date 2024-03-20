@@ -10,7 +10,7 @@ const UserSignIn = () => {
     // User Context
     const { actions } = useContext(UserContext);
   
-    // useNavigate hook
+    // Navigate hook
     const navigate = useNavigate();
 
     // Location hook
@@ -25,10 +25,8 @@ const UserSignIn = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         let from = '/';
-        console.log("from: " + from)
         if (location.state) {
             from = location.state.from;
-            console.log("from: " + from)
         }
 
         const credentials = {

@@ -40,12 +40,15 @@ const UpdateCourse = () => {
             await api(`/courses/${id}`, "GET", null, authUser)
             .then(response => response.json())
             .then(responseData => {
-                setCourse(responseData)
+                if (responseData.user.id !== authUser.id ) {
+                    navigate("/forbidden")
+                }
+                setCourse(responseData);
                 setLoading(false);
             })
         } catch (error) {
             console.log("Error fetching and parsing data", error);
-            navigate("/error")
+            navigate("/notfound")
         }
     }
 
@@ -56,9 +59,7 @@ const UpdateCourse = () => {
 
     // Update Course handler
     const handleUpdate = async e => {
-        e.preventDefault(); 
-        console.log("Update!");
-        console.log(course);
+        e.preventDefault();
 
        const courseUpdate = {
             title: courseTitle.current.value,
@@ -74,17 +75,13 @@ const UpdateCourse = () => {
             if (response.status === 204) {
                 navigate(`/courses/${id}`);
             } else if (response.status === 400) {
-                console.log("response: " + response);
                 const data = await response.json();
-                console.log("data: " + data.body);
                 setErrors(data.errors);
-                console.log("Errors: " + errors);
             } else {
                 throw new Error();
             }
         } catch (error) {
-            console.log("Error updating course.", error);
-            navigate("/error")
+            navigate("/notfound");
         }
     }
 

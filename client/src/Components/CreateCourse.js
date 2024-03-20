@@ -12,7 +12,7 @@ const CreateCourse = () => {
     // User Context
     const { authUser } = useContext(UserContext);
 
-    // useNavigate hook
+    // Navigate hook
     const navigate = useNavigate();
 
     // State
@@ -36,20 +36,16 @@ const CreateCourse = () => {
 
         try {
             const response = await api("/courses", "POST", course, authUser);
-            console.log("response: " + response.status);
 
             if (response.status === 201) {
-                console.log(`${course.title} is successfully created!`);
                 navigate("/");
             } else if (response.status === 400) {
                 const data = await response.json();
-                console.log("data: " + data.errors);
                 setErrors(data.errors);
             } else {
                 throw new Error();
             }
         } catch (error) {
-            console.log("errors: " + errors);
             navigate("/error")
         }
     }
