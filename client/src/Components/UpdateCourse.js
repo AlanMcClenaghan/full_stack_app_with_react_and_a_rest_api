@@ -65,6 +65,7 @@ const UpdateCourse = () => {
             }
         
         getCourse(); 
+
     },[authUser,id,navigate]);
 
     // Update Course handler
@@ -79,6 +80,7 @@ const UpdateCourse = () => {
        }
 
        setCourseUpdate(courseUpdate);
+       console.log(courseUpdate);
     
         try {
             const response = await api(`/courses/${id}`, "PUT", courseUpdate, authUser)
